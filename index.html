@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Último Refúgio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      
+      <div class="top-actions"><button id="back-to-lobby" class="icon-button" title="Voltar ao lobby">⌂</button><button id="fullscreen-game" class="icon-button" title="Tela cheia">⛶</button><button id="new-game" class="icon-button" title="Recomeçar partida">↻</button></div>
+    </header>
+
+    <section class="hud" aria-label="Status da comunidade">
+      <button id="disaster-book" class="status-card disaster-book" title="Abrir Livrinho de Desastres"><span>📖</span><div><small>LIVRO</small><strong>DESASTRES</strong><em>ver perigos e chances</em></div></button>
+      <div class="status-card supplies"><span>✦</span><div><small>SUPRIMENTOS</small><strong id="supplies-value">70</strong><em>para construir e reparar</em></div></div>
+      <div class="status-card shelter"><span>⌂</span><div><small>VIDA DA CASA</small><strong id="integrity-value">100%</strong><em>do seu abrigo</em></div></div>
+      <div class="status-card wave"><span>◌</span><div><small>NÍVEL ATUAL</small><strong id="wave-value">1/5</strong><em id="event-name">onda 1 de 10</em></div></div>
+    </section>
+
+    <section class="scene-wrap">
+      <div id="scene" class="scene calm" aria-label="Seu abrigo no vale">
+        <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
+        <div class="meteor-event"><i></i><b></b></div><div class="black-hole"><i></i><b></b></div><div class="extreme-arrival" aria-hidden="true"><div class="arrival-stars"></div><div class="arrival-earth"></div><div class="arrival-blackhole"></div><div class="arrival-sun"></div></div><div class="alien-invasion"><div class="ufo"><i></i></div><div class="beam"></div></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
+        <div class="ground"></div><div class="foreground"><i></i><i></i><i></i><i></i><i></i></div><div class="fireflies"><b></b><b></b><b></b><b></b></div>
+        <div class="tree tree-a"></div><div class="tree tree-b"></div><div class="tree tree-c"></div>
+        <div id="flood" class="flood"></div>
+        <div id="wind-lines" class="wind-lines"></div>
+        <div id="rain" class="rain"></div>
+        <div id="shelter-building" class="shelter-building level-1">
+          <div class="roof"><div class="radio-tower"></div></div><div class="house"><div class="window"></div><div class="door"></div><div class="house-tech"></div></div>
+          <div class="wall wall-left"></div><div class="wall wall-right"></div><div class="bunker-door"></div><div class="storm-roof"></div><div class="lava-shield"><div class="thermal-emblem"><i></i></div></div><div class="tech-core"><i></i></div><div class="blackhole-anchor"><i></i><b></b></div><div class="alien-dome"></div><div class="engineer-shield"></div><div class="meteor-dish"></div><div class="drone-pad"></div><div class="generator-box"></div><div class="flood-barrier barrier-left"></div><div class="flood-barrier barrier-right"></div>
+        </div>
+        <div id="disaster-indicator" class="disaster-indicator hidden"></div><div class="scene-label"><span id="season-label">DIA 1</span><strong id="scene-event">CALMARIA</strong></div>
+        <div class="base-bars"><div class="house-health"><span><i id="house-health-fill"></i></span><b id="house-health-text">100%</b></div><div class="shield-status"><span>◈ ESCUDO</span><div><i id="shield-fill"></i></div><b id="shield-value">50</b></div></div>
+        <div class="profession-bar" aria-label="Profissões da comunidade">
+          <button class="profession-card selected" data-profession="engineer"><span>⚙</span><b>Engenheiro</b><small>Cria escudo de 50 · custa 200</small></button>
+          <button class="profession-card" data-profession="doctor"><span>✚</span><b>Médico</b><small>Repara 30 de vida · custa 100</small></button>
+        </div><div id="damage-float" class="damage-float"></div>
+      </div>
+
+      <aside class="control-panel">
+        <div class="panel-heading"><div><p>PREPARE-SE</p><h2>Construa o abrigo</h2></div><button id="start-wave" class="primary-button panel-wave">PRÓXIMA ONDA <span>→</span></button></div>
+        <p id="message" class="message">A calmaria não dura para sempre. Fortaleça o abrigo antes da próxima onda.</p>
+        <div class="build-list">
+          <button class="build-button house-upgrade" data-action="house"><span class="build-icon">⌂</span><span><b>Casa</b><small>Muda completamente o abrigo</small></span><strong>22</strong></button>          <button class="build-button" data-action="walls"><span class="build-icon">▥</span><span><b>Paredes reforçadas</b><small>Reduz dano de terremotos</small></span><strong>25</strong></button>
+          <button class="build-button" data-action="roof"><span class="build-icon">⌁</span><span><b>Telhado anti-tempestade</b><small>Reduz dano de chuvas e ventos</small></span><strong>25</strong></button>
+          <button class="build-button" data-action="barrier"><span class="build-icon">≋</span><span><b>Barreira contra enchente</b><small>Reduz dano de inundações</small></span><strong>30</strong></button>
+          <button class="build-button alien-upgrade" data-action="alienShield"><span class="build-icon">◉</span><span><b>Escudo Anti-Alienígena</b><small>Protege contra raios das naves</small></span><strong>40</strong></button>
+          <button class="build-button meteor-upgrade" data-action="meteorShield"><span class="build-icon">☄</span><span><b>Defesa Anti-Meteoro</b><small>Protege contra impactos do céu</small></span><strong>55</strong></button>          <button class="build-button blackhole-upgrade" data-action="blackholeShield"><span class="build-icon">◉</span><span><b>Âncora Gravitacional</b><small>Reduz dano do Buraco Negro</small></span><strong>100</strong></button>          <button class="build-button" data-action="radio"><span class="build-icon">⌁</span><span><b>Rádio de emergência</b><small>Revela o próximo desastre</small></span><strong>20</strong></button>
+        </div>
+
+        <p class="tip">Dica: cada desastre fica mais forte. Uma boa defesa combina melhorias diferentes.</p>
+      </aside>
+    </section>
+
+    <section class="bottom-info">
+      <div><p>REGISTRO DE SOBREVIVÊNCIA</p><div id="log" class="log"><span>•</span> O vale está silencioso. Use os suprimentos com sabedoria.</div></div>
+      <div class="defenses"><p>DEFESAS</p><div><span>▥ <b id="walls-level">0</b></span><span>⌁ <b id="roof-level">0</b></span><span>≋ <b id="barrier-level">0</b></span><span>⌁ <b id="radio-level">0</b></span></div></div><div class="medals"><p>MEDALHAS</p><div id="medal-list" class="medal-list"><span class="medal locked">✦ Sobreviva a uma onda</span><span class="medal locked">◈ Sem danos</span><span class="medal locked">☀ Contra o Apocalipse</span><span class="medal locked">★ 10 ondas</span></div></div>
+    </section>
+  </main>
+  <section id="login-screen" class="login-screen" aria-label="Entrar no jogo">
+    <div class="login-card">
+      <p>ACESSO AO REFÚGIO</p><h1>ÚLTIMO<br><span>REFÚGIO</span></h1>
+      <input id="login-name" maxlength="18" autocomplete="username" placeholder="SEU NOME" />
+      <input id="login-password" type="password" maxlength="24" autocomplete="current-password" placeholder="SUA SENHA" />
+      <button id="login-enter" class="start-play">ENTRAR</button>
+      <button id="login-register" class="start-tutorial">REGISTRAR</button>
+      <small id="login-message">Crie um nome e senha exclusivos para começar.</small>
+    </div>
+  </section>  <section id="start-screen" class="start-screen" aria-label="Tela inicial">
+    <div class="start-stars"></div>
+    <div class="start-card">
+      <h1>ÚLTIMO<br><span>REFÚGIO</span></h1>
+      
+      <button id="play-game" class="start-play">▶ JOGAR AGORA</button>
+      <button id="hard-mode" class="hard-mode-toggle" aria-pressed="false">☠ MODO DIFÍCIL: DESLIGADO · +20 FRAGMENTOS/NÍVEL</button>
+      <button id="open-tutorial" class="start-tutorial">◈ COMO JOGAR</button>
+      <button id="open-medals" class="start-tutorial">✦ MEDALHAS</button>
+      <button id="open-store" class="start-tutorial">◇ LOJA</button>
+      <div class="fragment-display">✦ FRAGMENTOS <b id="fragments-value">0</b></div>
+      <small>Sobreviva a 5 níveis e 50 ondas de desastres.</small>
+    </div>
+  </section>
+  <section id="tutorial-screen" class="tutorial-screen hidden" aria-label="Tutorial do jogo">
+    <div class="tutorial-card">
+      <button id="close-tutorial" class="tutorial-close" title="Fechar">×</button>
+      <p>GUIA DE SOBREVIVÊNCIA</p><h2>Como jogar Último Refúgio</h2>
+      <div class="tutorial-grid">
+        <article><i>✦</i><h3>Suprimentos</h3><p>Use suprimentos para comprar melhorias. Cada onda vencida dá mais recursos.</p></article>
+        <article><i>⌂</i><h3>Vida da casa</h3><p>Se a vida chegar a zero, você perde. A cada novo nível ela volta para 100%.</p></article>
+        <article><i>▣</i><h3>Ondas e níveis</h3><p>São 5 níveis com 10 ondas cada. Os perigos ficam cada vez mais fortes.</p></article>
+        <article><i>⌁</i><h3>Rádio</h3><p>O rádio avisa o próximo desastre, mas não protege contra ataques.</p></article>
+        <article><i>✚</i><h3>Profissões</h3><p>Médico recupera 30 de vida. Engenheiro cria um escudo de 50 de vida.</p></article>
+        <article><i>◉</i><h3>Defesa certa</h3><p>Cada desastre só é reduzido pela proteção apropriada.</p></article>
+      </div>
+      <h3 class="tutorial-heading">Desastres e proteções</h3>
+      <div class="disaster-guide">
+        <span>⛈ <b>Tempestade</b><small>Telhado</small></span><span>🌊 <b>Enchente</b><small>Barreira</small></span><span>🌍 <b>Terremoto</b><small>Muralhas</small></span><span>🛸 <b>Alienígenas</b><small>Escudo Anti-Alienígena</small></span><span>☄ <b>Meteoros</b><small>Defesa Anti-Meteoro</small></span><span>☀ <b>Apocalipse Solar</b><small>Casa</small></span><span>🕳 <b>Buraco Negro</b><small>Âncora Gravitacional</small></span>
+      </div>
+      <button id="tutorial-play" class="start-play">ENTENDI, VAMOS JOGAR ▶</button>
+    </div>
+  </section>
+  <section id="store-screen" class="tutorial-screen hidden" aria-label="Loja">
+    <div class="tutorial-card store-card">
+      <button id="close-store" class="tutorial-close" title="Fechar">×</button>
+      <p>LOJA DO REFÚGIO</p><h2>Buffs iniciais</h2>
+      <div class="store-balance">✦ FRAGMENTOS: <b id="store-fragments-value">0</b></div>
+      <div class="store-grid">
+        <button class="store-item" data-buff="supplies"><i>✦</i><b>Kit de Suprimentos</b><small>Comece cada partida com +30 suprimentos.</small><strong>15 Fragmentos</strong></button>
+        <button class="store-item" data-buff="health"><i>♥</i><b>Estrutura Preparada</b><small>Comece cada partida com +20 de vida da casa.</small><strong>25 Fragmentos</strong></button>
+        <button class="store-item" data-buff="shield"><i>◈</i><b>Escudo de Emergência</b><small>Comece cada partida com escudo de 25 de vida.</small><strong>40 Fragmentos</strong></button>
+      </div>
+    </div>
+  </section>  <section id="medals-screen" class="tutorial-screen hidden" aria-label="Medalhas">
+    <div class="tutorial-card medal-room">
+      <button id="close-medals" class="tutorial-close" title="Fechar">×</button>
+      <p>COLEÇÃO DE CONQUISTAS</p><h2>Medalhas</h2>
+      <div id="lobby-medal-list" class="medal-list lobby-medal-list"></div>
+    </div>
+  </section>  <div id="modal" class="modal hidden"><div class="modal-card"><p id="modal-kicker">RELATÓRIO</p><h2 id="modal-title"></h2><p id="modal-text"></p><button id="modal-button" class="primary-button">CONTINUAR</button></div></div>
+  <button id="infinite-mode" class="infinite-mode" title="Modo dinheiro infinito">∞</button>
+  <aside id="test-panel" class="test-panel" aria-label="Painel de teste">
+    <button id="toggle-test-panel" class="test-toggle">🧪 TESTE</button>
+    <div class="test-content"><b>ATIVAR DESASTRE</b><small>Escolha um para testar</small><div class="test-buttons">
+      <button data-test-disaster="0">⛈ Tempestade</button><button data-test-disaster="1">🌊 Enchente</button><button data-test-disaster="2">🌍 Terremoto</button><button data-test-disaster="3">🌩 Supertempestade</button><button data-test-disaster="4">🌊 Megaenchente</button><button data-test-disaster="6">🛸 Alienígenas</button><button data-test-disaster="8">☄ Meteoros</button><button data-test-disaster="9">☀ Apocalipse Solar</button><button data-test-disaster="10">🕳 Buraco Negro</button>
+    </div></div>
+  </aside>
+  <script src="game.js"></script>
+</body>
+</html>
